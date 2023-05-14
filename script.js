@@ -107,6 +107,9 @@ function preapareObjects(data1, data2) {
     }
 
     allStudents.push(student);
+    console.log(
+      `Created student: ${student.firstName} ${student.lastName}, expelled: ${student.expelled}`
+    );
   });
 
   //------------- BUILD LIST ---------
@@ -172,13 +175,44 @@ function assignPrefect(student) {
   if (prefectsInHouse.length < 2) {
     student.prefect = true;
   } else {
-    console.log(`There are already two prefects in ${student.house}.`);
+    // Show the modal with the alert message
+    const modal = document.querySelector("#alertModal");
+    document.querySelector(
+      "#alertMessage"
+    ).textContent = `There are already two prefects in ${student.house}.`;
+    modal.style.display = "block";
+
+    // When the user clicks on the close button, close the modal
+    document.querySelector(".close-button").onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
   }
+
+  // {
+  //   console.log(`There are already two prefects in ${student.house}.`);
+  // }
 }
 
 function removePrefect(student) {
   student.prefect = false;
 }
+
+// function handlePrefectButtonClick() {
+//   if (this.student.prefect) {
+//     removePrefect(this.student);
+//   } else {
+//     assignPrefect(this.student);
+//   }
+//   displayStudentCard(this.student); // Refresh the card to show updated prefect status
+//   countAndUpdateDisplay();
+// }
 
 function handlePrefectButtonClick() {
   if (this.student.prefect) {
@@ -187,28 +221,28 @@ function handlePrefectButtonClick() {
     assignPrefect(this.student);
   }
   displayStudentCard(this.student); // Refresh the card to show updated prefect status
+  countAndUpdateDisplay();
+
+  // If the current filter is "prefects", refresh the list of prefects
+  if (settings.filterBy === "prefects") {
+    const prefectStudents = allStudents.filter(
+      (student) => student.prefect && !student.expelled
+    );
+    displayList(prefectStudents);
+  }
 }
-
-// ______________________prefect_
-
-// ------------------------Expel-----------
-// function expelStudent(student) {
-//   student.expelled = true;
-//   buildList(); // Refresh the list to reflect the updated expulsion status
-// }
 
 function expelStudent(student) {
   student.expelled = true;
+  countAndUpdateDisplay();
+  student.squad = false;
+  student.prefect = false;
+  console.log(
+    `Expelled student: ${student.firstName} ${student.lastName}, expelled: ${student.expelled}`
+  );
 
-  // Remove the student from all filtered lists
-  for (let i = 0; i < allStudents.length; i++) {
-    if (allStudents[i] === student) {
-      allStudents.splice(i, 1);
-      break;
-    }
-  }
-
-  buildList(); // Refresh the list to reflect the updated expulsion status
+  // buildList(true); // Refresh the list to reflect the updated expulsion status
+  // countAndUpdateDisplay();
 }
 
 // ------------------------Expel-----------
@@ -255,8 +289,10 @@ function displayStudentCard(student) {
   popup.querySelector("[data-field=house]").textContent = student.house;
   popup.querySelector("[data-field=bloodStatus]").textContent =
     student.bloodType;
-  popup.querySelector("[data-field=issquad]").textContent = student.squad;
-
+  // popup.querySelector("[data-field=issquad]").textContent = student.squad;
+  popup.querySelector("[data-field=issquad]").textContent = student.squad
+    ? "Yes"
+    : "No";
   popup
     .querySelector(".closebutton")
     .addEventListener("click", closeStudentCard);
@@ -275,8 +311,14 @@ function displayStudentCard(student) {
 
   // ------------------expel--------------
 
-  popup.querySelector("#expell").addEventListener("click", () => {
-    expelStudent(student);
+  const expelButton = popup.querySelector("#expell");
+  // Remove all existing event listeners from the button
+  let newButton = expelButton.cloneNode(true);
+  expelButton.parentNode.replaceChild(newButton, expelButton);
+
+  // Add the new event listener to the new button
+  newButton.addEventListener("click", () => {
+    expelStudentAndUpdateView(student);
     displayStudentCard(student); // Refresh the card to show updated expulsion status
   });
 
@@ -287,11 +329,16 @@ function displayStudentCard(student) {
   popup.querySelector("[data-field=isprefect]").textContent = student.prefect
     ? "Yes"
     : "No";
+
   const prefectButton = popup.querySelector("#prefect");
   prefectButton.removeEventListener("click", handlePrefectButtonClick); // Remove existing event listener
   prefectButton.student = student; // Store the student data in the button element
   prefectButton.addEventListener("click", handlePrefectButtonClick); // Add new event listener
-
+  if (student.prefect) {
+    prefectButton.textContent = "Remove Prefect";
+  } else {
+    prefectButton.textContent = "Assign Prefect";
+  }
   // -----------------Prefect-----------------------
 
   function closeStudentCard() {
@@ -312,28 +359,55 @@ function displayStudentCard(student) {
       console.log(` person is pure blood or slytherin`, settings.squad);
       console.log(student.squad);
     } else {
-      alert("only people of pure blood or in Slytherin can be members");
-      console.log(` person cannot be squad`, student.bloodType, student.house);
+      // Show the modal with the alert message
+      const modal = document.querySelector("#alertModal");
+      document.querySelector("#alertMessage").textContent =
+        "Only people of pure blood or in Slytherin can be members";
+      modal.style.display = "block";
+
+      // When the user clicks on the close button, close the modal
+      document.querySelector(".close-button").onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
     }
+
+    // {
+    //   alert("only people of pure blood or in Slytherin can be members");
+    //   console.log(` person cannot be squad`, student.bloodType, student.house);
+    // }
     buildList();
 
     displayStudentCard(student);
   }
 }
 
-function buildList() {
-  const currentList = filterList(allStudents);
+function buildList(skipFiltering = false) {
+  let currentList = allStudents;
+
+  if (!skipFiltering) {
+    currentList = filterList(allStudents);
+  }
 
   const sortedList = sortList(currentList);
 
-  console.log(sortedList.length);
   displayList(sortedList);
+  // const counts = countAndUpdateDisplay();
+  // countAndUpdateDisplay(counts);
+  countAndUpdateDisplay();
 }
 
 // -------------------- FILTERING ---------------------------
 
 function filterBySquad() {
   console.log("I am in filterbySquad");
+  settings.filterBy = "inquisitorialsquad";
   settings.squad = allStudents.filter((student) => student.squad);
 
   displayList(settings.squad);
@@ -357,9 +431,16 @@ function setFilter(filter) {
 
 function filterList(filteredList) {
   if (settings.filterBy === "expelled") {
+    console.log(`Filtering expelled students...`);
     filteredList = allStudents.filter((student) => student.expelled);
+  } else if (settings.filterBy === "inquisitorialsquad") {
+    filteredList = allStudents.filter(
+      (student) => student.squad && !student.expelled
+    );
   } else if (settings.filterBy === "prefects") {
-    filteredList = allStudents.filter((student) => student.prefect);
+    filteredList = allStudents.filter(
+      (student) => student.prefect && !student.expelled
+    );
   } else if (settings.filterBy !== "All") {
     // Exclude expelled students when filtering by other criteria
     filteredList = allStudents.filter(
@@ -369,13 +450,6 @@ function filterList(filteredList) {
     // Exclude expelled students from the main list
     filteredList = allStudents.filter((student) => !student.expelled);
   }
-
-  // {
-  //   filteredList = allStudents.filter(filterBy);
-  // } else {
-  //   filteredList = allStudents;
-  // }
-
   return filteredList;
 }
 
@@ -435,4 +509,74 @@ function searchStudents() {
   displayList(searchedStudents);
 }
 
-// ------------search-----
+function countAndUpdateDisplay() {
+  const counts = {
+    All: allStudents.filter((student) => !student.expelled).length,
+    gryffindor: allStudents.filter(
+      (student) => student.house === "Gryffindor" && !student.expelled
+    ).length,
+    hufflepuff: allStudents.filter(
+      (student) => student.house === "Hufflepuff" && !student.expelled
+    ).length,
+    ravenclaw: allStudents.filter(
+      (student) => student.house === "Ravenclaw" && !student.expelled
+    ).length,
+    slytherin: allStudents.filter(
+      (student) => student.house === "Slytherin" && !student.expelled
+    ).length,
+    "pure-blood": allStudents.filter(
+      (student) => student.bloodType === "Pure-Blood" && !student.expelled
+    ).length,
+    "half-blood": allStudents.filter(
+      (student) => student.bloodType === "Half-Blood" && !student.expelled
+    ).length,
+    muggle: allStudents.filter(
+      (student) => student.bloodType === "Muggle" && !student.expelled
+    ).length,
+    prefects: allStudents.filter(
+      (student) => student.prefect && !student.expelled
+    ).length,
+    inquisitorialsquad: allStudents.filter(
+      (student) => student.squad && !student.expelled
+    ).length,
+    enrolled: allStudents.filter((student) => !student.expelled).length,
+    expelled: allStudents.filter((student) => student.expelled).length,
+  };
+
+  for (const filter in counts) {
+    const count = counts[filter];
+    const filterElement = document.querySelector(`p[data-filter="${filter}"]`);
+    if (filterElement) {
+      const spanElement = filterElement.querySelector("span");
+      if (spanElement) {
+        spanElement.textContent = count;
+      }
+    }
+  }
+}
+
+function expelStudentAndUpdateView(student) {
+  console.log("Expelling student:", student.firstName, student.lastName);
+  // Expel the student
+  expelStudent(student);
+
+  switch (settings.filterBy) {
+    case "inquisitorialsquad":
+      // If the current filter is the Inquisitorial Squad, refresh this view
+      filterBySquad();
+      break;
+    case "prefects":
+      // If the current filter is the Prefects, refresh this view
+      const prefectStudents = allStudents.filter(
+        (student) => student.prefect && !student.expelled
+      );
+      console.log("Updating Prefects list:", prefectStudents);
+      displayList(prefectStudents);
+      break;
+    default:
+      // Otherwise, refresh the main list
+      console.log("Updating main list");
+      buildList();
+      break;
+  }
+}

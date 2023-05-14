@@ -3,87 +3,83 @@
 }
 
 .filtering {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    position: sticky;  
-    background-color: rgba(228, 228, 228, 0.492); 
-    grid-column: 1/2;
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    justify-content: center;
-  }
-  
-  aside {
-    margin: 0;
-    position: sticky;
-    width: 255px;
-    height: 100vh;
-    top: 0;
-    
-  }
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  position: sticky;
+  background-color: rgba(228, 228, 228, 0.492);
+  grid-column: 1/2;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  justify-content: center;
+}
 
-  [data-action="filter"] {
-    padding-left: 2rem;
-    line-height: 0.3rem;
-    cursor: pointer;
+aside {
+  margin: 0;
+  position: sticky;
+  width: 255px;
+  height: 100vh;
+  top: 0;
+}
 
-  }
-  
-  body {
-    font-family: "Source Code Pro", monospace;
-    background-color: #222f5b;
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-  }
-  
-  .hidden{
-    visibility: hidden;
-  }
+[data-action="filter"] {
+  padding-left: 2rem;
+  line-height: 0.3rem;
+  cursor: pointer;
+}
 
-  .head {
-    padding-left: 2rem;
-    top:0;
-    position: sticky;
-    background-color:#546397;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    
-  }
+body {
+  font-family: "Source Code Pro", monospace;
+  background-color: #222f5b;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
 
-  .head h2 {
-    grid-column: 1/4;
-  }
+.hidden {
+  visibility: hidden;
+}
 
-  .head p  {
-    grid-column: 1/2;
-  }
+.head {
+  padding-left: 2rem;
+  top: 0;
+  position: sticky;
+  background-color: #546397;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.head h2 {
+  grid-column: 1/4;
+}
+
+.head p {
+  grid-column: 1/2;
+}
 
 .sort_by {
-    grid-column: 1/3 ;
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: 1rem;
-
+  grid-column: 1/3;
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 1rem;
 }
 
 .sort_by button {
-    background-color: rgb(230, 230, 230);
-    border: 1px solid rgb(209, 209, 209);
-    font-family: "Source Code Pro", monospace;
-    padding: 0.7rem;
-    width: 17%;
-    border-radius: 10px;
-    cursor: pointer;
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(209, 209, 209);
+  font-family: "Source Code Pro", monospace;
+  padding: 0.7rem;
+  width: 17%;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 tbody {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
 
-tbody tr{
+tbody tr {
   cursor: pointer;
 }
 
@@ -97,14 +93,14 @@ tbody tr td {
   width: 450px;
   /* background-color: rgb(17, 66, 17) ; */
 
-border-radius: 20px;
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-line-height: 0.5rem; 
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  line-height: 0.5rem;
 }
 
-.inq{
-line-height: 1.2rem;
+.inq {
+  line-height: 1.2rem;
 }
 
 #crest_image {
@@ -148,12 +144,11 @@ line-height: 1.2rem;
 }
 
 #popupButtons {
-padding-top: 2rem;
+  padding-top: 2rem;
 
   grid-column: 1/4;
   display: flex;
   justify-content: space-between;
-  
 }
 
 #popupButtons button {
@@ -161,23 +156,18 @@ padding-top: 2rem;
 }
 
 #prefect {
-  text-decoration: line-through;
 }
 
 #expell {
-  text-decoration: line-through;
 }
 
 p[data-filter="prefects"] {
-  text-decoration: line-through;
 }
 
 p[data-filter="enrolled"] {
-  text-decoration: line-through;
 }
 
 p[data-filter="expelled"] {
-  text-decoration: line-through;
 }
 
 td[data-field="firstName"] {
@@ -187,27 +177,56 @@ td[data-field="lastName"] {
   color: white;
 }
 
-.ravenclaw{
-  background-color:#222f5b !important;
+.ravenclaw {
+  background-color: #222f5b !important;
   border: 4px solid rgb(255, 183, 0);
 }
 
-.gryffindor{
-  background-color:#801717 !important;
+.gryffindor {
+  background-color: #801717 !important;
   border: 4px solid rgb(255, 183, 0);
 }
 
-.hufflepuff{
-  background-color:rgb(31, 31, 31)!important;
+.hufflepuff {
+  background-color: rgb(31, 31, 31) !important;
   border: 4px solid rgb(255, 183, 0);
 }
 
-.slytherin{
-  background-color:rgb(17, 66, 17) !important;
-  border: 4px solid rgb(151, 151, 151); 
+.slytherin {
+  background-color: rgb(17, 66, 17) !important;
+  border: 4px solid rgb(151, 151, 151);
 }
 
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
 
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
 
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-  
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

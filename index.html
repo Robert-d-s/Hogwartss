@@ -13,21 +13,21 @@
     <aside>
       <input type="text" id="search" placeholder="Search students...">
         <div class="filtering">
-         <p data-action="filter" data-filter="All">All Students <span>34</span></p>  
+         <p data-action="filter" data-filter="All">Enrolled <span></span></p>  
          <p>HOUSES</p>
-         <p data-action="filter" data-filter="gryffindor">Gryffindor <span>34</span></p>
-         <p data-action="filter" data-filter="hufflepuff">Hufflepuff <span>34</span></p>
-         <p data-action="filter" data-filter="ravenclaw">Ravenclaw <span>34</span></p>
-         <p data-action="filter" data-filter="slytherin">Slytherin <span>34</span></p>
+         <p data-action="filter" data-filter="gryffindor">Gryffindor <span></span></p>
+         <p data-action="filter" data-filter="hufflepuff">Hufflepuff <span></span></p>
+         <p data-action="filter" data-filter="ravenclaw">Ravenclaw <span></span></p>
+         <p data-action="filter" data-filter="slytherin">Slytherin <span></span></p>
          <p>BLOOD STATUS</p>
-         <p data-action="filter" data-filter="pure-blood">Pure-blood <span>34</span></p>
-         <p data-action="filter" data-filter="half-blood">Half-blood <span>34</span></p>
-         <p data-action="filter" data-filter="muggle">Muggle <span>34</span></p>
+         <p data-action="filter" data-filter="pure-blood">Pure-blood <span></span></p>
+         <p data-action="filter" data-filter="half-blood">Half-blood <span></span></p>
+         <p data-action="filter" data-filter="muggle">Muggle <span></span></p>
          <p>OTHER</p>
-         <p data-action="filter" data-filter="prefects">Prefects <span>34</span></p>
-         <p data-action="filter" data-filter="inquisitorialsquad">Inquisitorial Squad <span>34</span></p>
-         <p data-action="filter" data-filter="enrolled">Enrolled <span>34</span></p>
-         <p data-action="filter" data-filter="expelled">Expelled <span>34</span></p>
+         <p data-action="filter" data-filter="prefects">Prefects <span></span></p>
+         <p data-action="filter" data-filter="inquisitorialsquad">Inquisitorial Squad <span></span></p>
+         <!-- <p data-action="filter" data-filter="enrolled">Enrolled <span></span></p> -->
+         <p data-action="filter" data-filter="expelled">Expelled <span></span></p>
          </div>
      </aside>
    <main>
@@ -114,7 +114,13 @@
       <button id="squad" data-field="squad">Assign to Inquisitorial Squad</button>
       <button id="expell" data-field="expell">Expell Student</button></div>
   </div>
-
+  <div id="alertModal" >
+    <div class="modal-content">
+      <span class="close-button">X</span>
+      <p id="alertMessage"></p>
+    </div>
+  </div>
+  
    </main>
 
   
