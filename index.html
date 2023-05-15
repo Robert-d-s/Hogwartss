@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
     <script  src="script.js"></script>
-    <title>Cleaning Hogwarts List</title>
+    <title>Hogwarts Student List</title>
 
 </head>
 <body>
@@ -75,8 +76,11 @@
    </section>
    <div class="modal hidden">
    <div id="popupBox">
-    <button class="closebutton">X</button>
+        <button class="closebutton">X</button>
+        <div class="images">
       <img id="picture" src="images/boot_t.png" alt="profile_picture">
+      <img id="houseCrest" src="" alt="House Crest">
+    </div>
       <div id="popup_details">
       <div class="info">
       <p >First name:</p>
@@ -105,9 +109,9 @@
       <div class="info inq">
             <p>Inquisitorial Squad Member:</p>
             <p data-field="issquad">No</p></div>
-    <div class="info">
+    <!-- <div class="info">
               <p>Expelled:</p>
-              <p data-field="expelled">No</p></div>
+              <p data-field="expelled">No</p></div> -->
       </div>
     <div id="popupButtons">
       <button id="prefect" data-field="prefect">Assign Prefect</button>

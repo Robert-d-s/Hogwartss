@@ -4,7 +4,7 @@ window.addEventListener("DOMContentLoaded", start);
 
 let allStudents = [];
 
-// The prototype for all students:
+//Prototype
 const Student = {
   firstName: "",
   middleName: null,
@@ -55,18 +55,13 @@ function registerButtons() {
     .forEach((button) => button.addEventListener("click", selectSort));
 }
 
-//clean the data
 function preapareObjects(data1, data2) {
   data1.forEach((jsonObject) => {
     const student = Object.create(Student);
-    //The trim() method removes whitespace from both ends of a string and returns a new string, without modifying the original string
 
-    //The regular expression /\s+/ matches one or more whitespace characters (e.g., space, tab, newline) in the string. This means that the string will be split wherever there is one or more whitespace characters
     let nameParts = jsonObject.fullname.trim().split(/\s+/);
 
-    // Capitalize the name parts correctly
     student.firstName = capitalizeName(nameParts[0]);
-
     student.house = capitalizeName(jsonObject.house.trim());
     student.gender = capitalizeName(jsonObject.gender.trim());
 
@@ -112,18 +107,14 @@ function preapareObjects(data1, data2) {
     );
   });
 
-  //------------- BUILD LIST ---------
-
   buildList();
 }
 
 function capitalizeName(name) {
-  //checks whether the name argument is falsy (i.e., null, undefined, false, 0, "", NaN). If it is, the function immediately returns null
   if (!name) return null;
 
   const hyphenIndex = name.indexOf("-");
 
-  //find the index of the first occurrence of a hyphen (-) in the name. If there is no hyphen, the hyphenIndex variable will be set to -1.
   if (hyphenIndex !== -1) {
     return (
       name.slice(0, hyphenIndex + 1) +
@@ -140,22 +131,18 @@ function displayList(student) {
   document.querySelector("#list tbody").innerHTML = "";
 
   // update student count
-  // document.querySelector("#studentCount").textContent = student.length;
   const studentCountElement = document.querySelector("#studentCount");
   if (studentCountElement) {
     studentCountElement.textContent = student.length;
   }
-
   // build a new list
   student.forEach(displayStudent);
 }
 
 function displayStudent(student) {
-  // create clone
   const clone = document
     .querySelector("template#student")
     .content.cloneNode(true);
-
   // set clone data
   clone.querySelector("[data-field=firstName]").textContent = student.firstName;
   clone.querySelector("[data-field=lastName]").textContent = student.lastName;
@@ -163,11 +150,9 @@ function displayStudent(student) {
   clone.querySelector("#image").addEventListener(`click`, () => {
     displayStudentCard(student);
   });
-  // append clone to list
   document.querySelector("#list tbody").appendChild(clone);
 }
 
-// ______________________prefect_
 function assignPrefect(student) {
   const prefectsInHouse = allStudents.filter(
     (s) => s.house === student.house && s.prefect
@@ -175,14 +160,13 @@ function assignPrefect(student) {
   if (prefectsInHouse.length < 2) {
     student.prefect = true;
   } else {
-    // Show the modal with the alert message
     const modal = document.querySelector("#alertModal");
+
     document.querySelector(
       "#alertMessage"
     ).textContent = `There are already two prefects in ${student.house}.`;
     modal.style.display = "block";
 
-    // When the user clicks on the close button, close the modal
     document.querySelector(".close-button").onclick = function () {
       modal.style.display = "none";
     };
@@ -194,25 +178,11 @@ function assignPrefect(student) {
       }
     };
   }
-
-  // {
-  //   console.log(`There are already two prefects in ${student.house}.`);
-  // }
 }
 
 function removePrefect(student) {
   student.prefect = false;
 }
-
-// function handlePrefectButtonClick() {
-//   if (this.student.prefect) {
-//     removePrefect(this.student);
-//   } else {
-//     assignPrefect(this.student);
-//   }
-//   displayStudentCard(this.student); // Refresh the card to show updated prefect status
-//   countAndUpdateDisplay();
-// }
 
 function handlePrefectButtonClick() {
   if (this.student.prefect) {
@@ -220,10 +190,9 @@ function handlePrefectButtonClick() {
   } else {
     assignPrefect(this.student);
   }
-  displayStudentCard(this.student); // Refresh the card to show updated prefect status
+  displayStudentCard(this.student);
   countAndUpdateDisplay();
 
-  // If the current filter is "prefects", refresh the list of prefects
   if (settings.filterBy === "prefects") {
     const prefectStudents = allStudents.filter(
       (student) => student.prefect && !student.expelled
@@ -240,14 +209,7 @@ function expelStudent(student) {
   console.log(
     `Expelled student: ${student.firstName} ${student.lastName}, expelled: ${student.expelled}`
   );
-
-  // buildList(true); // Refresh the list to reflect the updated expulsion status
-  // countAndUpdateDisplay();
 }
-
-// ------------------------Expel-----------
-
-// -------------------- POPUP BOX ---------------------------
 
 function displayStudentCard(student) {
   if (student.house === "Gryffindor") {
@@ -276,6 +238,14 @@ function displayStudentCard(student) {
     console.log(`i am slytherin`);
   }
 
+  // Get the house crest image element
+  let houseCrestImage = document.getElementById("houseCrest");
+
+  // Set the src attribute based on the student's house
+  houseCrestImage.src = `images/${student.house.toLowerCase()}_crest.png`;
+
+  // Rest of your function...
+
   let popup = document.querySelector(".modal");
   popup.classList.remove("hidden");
 
@@ -289,18 +259,15 @@ function displayStudentCard(student) {
   popup.querySelector("[data-field=house]").textContent = student.house;
   popup.querySelector("[data-field=bloodStatus]").textContent =
     student.bloodType;
-  // popup.querySelector("[data-field=issquad]").textContent = student.squad;
   popup.querySelector("[data-field=issquad]").textContent = student.squad
     ? "Yes"
     : "No";
   popup
     .querySelector(".closebutton")
     .addEventListener("click", closeStudentCard);
-
   popup
     .querySelector("[data-field=squad]")
     .addEventListener("click", addToSquad);
-
   if (student.squad) {
     popup.querySelector("[data-field=squad]").textContent =
       "Remove from Inquisitorial Squad";
@@ -372,8 +339,8 @@ function displayStudentCard(student) {
 
       // When the user clicks anywhere outside of the modal, close it
       window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
+        if (event.target == alertModal) {
+          alertModal.style.display = "none";
         }
       };
     }
@@ -398,8 +365,6 @@ function buildList(skipFiltering = false) {
   const sortedList = sortList(currentList);
 
   displayList(sortedList);
-  // const counts = countAndUpdateDisplay();
-  // countAndUpdateDisplay(counts);
   countAndUpdateDisplay();
 }
 
