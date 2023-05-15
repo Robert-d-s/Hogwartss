@@ -153,6 +153,7 @@ tbody tr td {
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.478);
+  z-index: 99;
 }
 
 #popupButtons {
