@@ -55,9 +55,11 @@ const AppState = {
   sortStudents(students) {
     const direction = this.currentSort.direction === "desc" ? -1 : 1;
     return [...students].sort((a, b) => {
-      if (a[this.currentSort.by] < b[this.currentSort.by])
-        return -1 * direction;
-      if (a[this.currentSort.by] > b[this.currentSort.by]) return 1 * direction;
+      const aValue = a[this.currentSort.by] || "";
+      const bValue = b[this.currentSort.by] || "";
+
+      if (aValue < bValue) return -1 * direction;
+      if (aValue > bValue) return 1 * direction;
       return 0;
     });
   },
@@ -126,18 +128,46 @@ const UI = {
     const imageEl = clone.querySelector("#image");
 
     if (firstNameEl) firstNameEl.textContent = student.firstName;
-    if (lastNameEl) lastNameEl.textContent = student.lastName;
+    if (lastNameEl) lastNameEl.textContent = student.lastName || "";
 
     if (imageEl) {
       imageEl.src = student.image;
-      imageEl.alt = `${student.firstName} ${student.lastName} portrait`;
+      const fullName = student.lastName
+        ? `${student.firstName} ${student.lastName}`
+        : student.firstName;
+      imageEl.alt = `${fullName} portrait`;
 
       // Add error handling for missing images
       imageEl.addEventListener("error", function () {
-        this.src = "images/default_placeholder.png";
-        console.warn(
-          `Image not found for student: ${student.firstName} ${student.lastName}`
-        );
+        // Instead of trying another potentially missing image,
+        // hide the image and show a placeholder text or use a data URL
+        this.style.display = "none";
+
+        // Create a placeholder div if it doesn't exist
+        const placeholder =
+          this.parentElement.querySelector(".image-placeholder");
+        if (!placeholder) {
+          const placeholderDiv = document.createElement("div");
+          placeholderDiv.className = "image-placeholder";
+          placeholderDiv.textContent = "No Photo";
+
+          // Make placeholder clickable too
+          placeholderDiv.addEventListener("click", () =>
+            Modal.showStudentDetails(student)
+          );
+
+          // Add keyboard support for placeholder
+          placeholderDiv.setAttribute("tabindex", "0");
+          placeholderDiv.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              Modal.showStudentDetails(student);
+            }
+          });
+
+          this.parentElement.appendChild(placeholderDiv);
+        }
+        console.warn(`Image not found for student: ${fullName}`);
       });
 
       // Add click handler with better accessibility
@@ -246,8 +276,12 @@ const StudentManager = {
         student.middleName = Utils.capitalizeName(nameParts[1]);
       }
       student.lastName = Utils.capitalizeName(nameParts[2]);
-    } else if (nameParts.length >= 2) {
+    } else if (nameParts.length === 2) {
       student.lastName = Utils.capitalizeName(nameParts[1]);
+    } else if (nameParts.length === 1) {
+      // Special case: Student with only one name (like "Leanne")
+      // Set lastName to null and use firstName for display
+      student.lastName = null;
     }
 
     // Generate image path
@@ -267,6 +301,7 @@ const StudentManager = {
     } else if (student.firstName === "Parvati") {
       return "images/patil_parvati.png";
     } else if (!student.lastName || student.lastName === "null") {
+      // Special case for students with only one name (like "Leanne")
       return `images/${student.firstName.toLowerCase()}.png`;
     } else {
       return `images/${student.lastName.toLowerCase()}_${student.firstName
@@ -276,6 +311,11 @@ const StudentManager = {
   },
 
   determineBloodType(lastName, bloodData) {
+    // If no lastName, cannot determine blood type from family data
+    if (!lastName || lastName === "null") {
+      return "Muggle"; // Default for students with unknown family background
+    }
+
     if (bloodData.half.includes(lastName)) {
       return "Half-Blood";
     } else if (bloodData.pure.includes(lastName)) {
@@ -611,7 +651,8 @@ const Modal = {
       elements.middleName.textContent = student.middleName || "None";
     if (elements.nickName)
       elements.nickName.textContent = student.nickName || "None";
-    if (elements.lastName) elements.lastName.textContent = student.lastName;
+    if (elements.lastName)
+      elements.lastName.textContent = student.lastName || "None";
     if (elements.gender) elements.gender.textContent = student.gender;
     if (elements.house) elements.house.textContent = student.house;
     if (elements.bloodStatus)
@@ -742,22 +783,3 @@ const Modal = {
     this.eventListeners.clear();
   },
 };
-
-// Legacy function cleanup - these are kept for any remaining dependencies
-// but will be removed in future versions
-
-// Deprecated: Use AppState.updateFilteredStudents() instead
-function buildList() {
-  console.warn(
-    "buildList() is deprecated. Use AppState.updateFilteredStudents() instead."
-  );
-  AppState.updateFilteredStudents();
-}
-
-// Deprecated: Use UI.updateCounts() instead
-function countAndUpdateDisplay() {
-  console.warn(
-    "countAndUpdateDisplay() is deprecated. Use UI.updateCounts() instead."
-  );
-  UI.updateCounts();
-}

@@ -164,6 +164,26 @@ tbody tr td img:hover {
   transform: scale(1.05);
 }
 
+.image-placeholder {
+  width: 60% !important;
+  height: 80px !important;
+  background-color: #f0f0f0 !important;
+  border: 2px dashed #ccc !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  color: #666 !important;
+  border-radius: 8px !important;
+  margin: 0 auto !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.image-placeholder:hover {
+  background-color: #e8e8e8 !important;
+}
+
 #popupBox {
   position: relative;
   padding: 2rem;
