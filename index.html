@@ -1,126 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="style.css">
-    <script  src="script.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Hogwarts Student Management System - Browse, filter, and manage students by house, blood status, and more."
+    />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
     <title>Hogwarts Student List</title>
-
-</head>
-<body>
-    <aside>
-      <input type="text" id="search" placeholder="Search students...">
-        <div class="filtering">
-         <p data-action="filter" data-filter="All">Enrolled <span></span></p>  
-         <p>HOUSES</p>
-         <p data-action="filter" data-filter="gryffindor">Gryffindor <span></span></p>
-         <p data-action="filter" data-filter="hufflepuff">Hufflepuff <span></span></p>
-         <p data-action="filter" data-filter="ravenclaw">Ravenclaw <span></span></p>
-         <p data-action="filter" data-filter="slytherin">Slytherin <span></span></p>
-         <p>BLOOD STATUS</p>
-         <p data-action="filter" data-filter="pure-blood">Pure-blood <span></span></p>
-         <p data-action="filter" data-filter="half-blood">Half-blood <span></span></p>
-         <p data-action="filter" data-filter="muggle">Muggle <span></span></p>
-         <p>OTHER</p>
-         <p data-action="filter" data-filter="prefects">Prefects <span></span></p>
-         <p data-action="filter" data-filter="inquisitorialsquad">Inquisitorial Squad <span></span></p>
-         <p data-action="filter" data-filter="expelled">Expelled <span></span></p>
-         </div>
-     </aside>
-   <main>
-   <section class="head">
-    <h2>Displayed Students <span id="studentCount">34</span></h2>
-    <p>Sort by:</p>
-    <div class="sort_by">
-        <button id="sort_by_first_name" data-sort="firstName" data-action="sort" data-sort-direction="asc">First name A-Z</button>
-        <button id="sort_by_first_name" data-sort="firstName" data-action="sort" data-sort-direction="desc">First name Z-A</button>
-        <button id="sort_by_last_name" data-sort="lastName" data-action="sort" data-sort-direction="asc">Last name A-Z</button> 
-        <button id="sort_by_last_name" data-sort="lastName" data-action="sort" data-sort-direction="desc">Last name Z-A</button>     
-    </div>
-   </section>
-   <section id="list_of_students">
-    <table id="list">
-       <!--  <thead>
-          <tr>
-            <th>Image</th>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Nick Name</th>
-            <th>Last Name</th>
-            <th>Gender</th>
-            <th>House</th>
-            <th>Blood Type</th>
-          </tr>
-        </thead> -->
-        <tbody>
-          <!-- student's template will be copied and inserted here -->
-        </tbody>
-      </table>
-  
-      <template id="student">
-        <!-- the tr element defines a row in a table -->
-        <tr>
-         
-          <td><img id="image" src="images/bones_s.png" alt=""></td>
-          <td data-field="firstName">First Name</td>
-        
-          <td data-field="lastName">Last Name</td>
-         
-        </tr>
-      </template>
- 
-   </section>
-   <div class="modal hidden">
-   <div id="popupBox">
-        <button class="closebutton">X</button>
-        <div class="images">
-      <img id="picture" src="images/boot_t.png" alt="profile_picture">
-      <img id="houseCrest" src="" alt="House Crest">
-    </div>
-      <div id="popup_details">
-      <div class="info">
-      <p >First name:</p>
-      <p data-field="firstName">Hannah</p> </div>
-      <div class="info">
-        <p>Middle name:</p>
-      <p data-field="middleName">None</p></div>
-        <div class="info">
-        <p>Nickname:</p>
-      <p data-field="nickName">None</p></div>
-      <div class="info">
-      <p>Last name:</p>
-      <p data-field="lastName">Abbott</p></div>
-      <div class="info">
-        <p>Blood status:</p>
-        <p data-field="bloodStatus">Pure</p></div>
-        <div class="info">
-          <p>Gender:</p>
-          <p data-field="gender">Girl</p></div>
-       <div class="info">
-            <p>House:</p>
-            <p data-field="house">Hufflepuff</p></div>
-     <div class="info">
-          <p>Prefect:</p>
-          <p data-field="isprefect">No</p></div>
-      <div class="info inq">
-            <p>Inquisitorial Squad Member:</p>
-            <p data-field="issquad">No</p></div>
-
+  </head>
+  <body>
+    <aside role="complementary" aria-label="Filters and navigation">
+      <div class="search-section">
+        <label for="search" class="visually-hidden"
+          >Search students by name</label
+        >
+        <input
+          type="text"
+          id="search"
+          placeholder="Search students..."
+          aria-describedby="search-help"
+        />
+        <div id="search-help" class="visually-hidden">
+          Enter first or last name to search students
+        </div>
       </div>
-    <div id="popupButtons">
-      <button id="prefect" data-field="prefect">Assign Prefect</button>
-      <button id="squad" data-field="squad">Assign to Inquisitorial Squad</button>
-      <button id="expell" data-field="expell">Expell Student</button></div>
-  </div>
-  <div id="alertModal" >
-    <div class="modal-content">
-      <span class="close-button">X</span>
-      <p id="alertMessage"></p>
-    </div>
-  </div>
-     </main>
-     </body>
+      <nav class="filtering" aria-label="Student filters">
+        <h3 class="visually-hidden">Filter Students</h3>
+        <button
+          type="button"
+          data-action="filter"
+          data-filter="All"
+          aria-pressed="true"
+        >
+          Enrolled <span aria-label="student count"></span>
+        </button>
+        <h4>Houses</h4>
+        <button type="button" data-action="filter" data-filter="gryffindor">
+          Gryffindor <span aria-label="student count"></span>
+        </button>
+        <button type="button" data-action="filter" data-filter="hufflepuff">
+          Hufflepuff <span aria-label="student count"></span>
+        </button>
+        <button type="button" data-action="filter" data-filter="ravenclaw">
+          Ravenclaw <span aria-label="student count"></span>
+        </button>
+        <button type="button" data-action="filter" data-filter="slytherin">
+          Slytherin <span aria-label="student count"></span>
+        </button>
+        <h4>Blood Status</h4>
+        <button type="button" data-action="filter" data-filter="pure-blood">
+          Pure-blood <span aria-label="student count"></span>
+        </button>
+        <button type="button" data-action="filter" data-filter="half-blood">
+          Half-blood <span aria-label="student count"></span>
+        </button>
+        <button type="button" data-action="filter" data-filter="muggle">
+          Muggle <span aria-label="student count"></span>
+        </button>
+        <h4>Other</h4>
+        <button type="button" data-action="filter" data-filter="prefects">
+          Prefects <span aria-label="student count"></span>
+        </button>
+        <button
+          type="button"
+          data-action="filter"
+          data-filter="inquisitorialsquad"
+        >
+          Inquisitorial Squad <span aria-label="student count"></span>
+        </button>
+        <button type="button" data-action="filter" data-filter="expelled">
+          Expelled <span aria-label="student count"></span>
+        </button>
+      </nav>
+    </aside>
+    <main role="main">
+      <header class="head">
+        <h1>
+          Displayed Students
+          <span id="studentCount" aria-live="polite">34</span>
+        </h1>
+        <div class="sort-section">
+          <h2>Sort by:</h2>
+          <div class="sort_by" role="group" aria-label="Sort options">
+            <button
+              type="button"
+              id="sort_by_first_name_asc"
+              data-sort="firstName"
+              data-action="sort"
+              data-sort-direction="asc"
+              aria-describedby="sort-help"
+            >
+              First name A-Z
+            </button>
+            <button
+              type="button"
+              id="sort_by_first_name_desc"
+              data-sort="firstName"
+              data-action="sort"
+              data-sort-direction="desc"
+              aria-describedby="sort-help"
+            >
+              First name Z-A
+            </button>
+            <button
+              type="button"
+              id="sort_by_last_name_asc"
+              data-sort="lastName"
+              data-action="sort"
+              data-sort-direction="asc"
+              aria-describedby="sort-help"
+            >
+              Last name A-Z
+            </button>
+            <button
+              type="button"
+              id="sort_by_last_name_desc"
+              data-sort="lastName"
+              data-action="sort"
+              data-sort-direction="desc"
+              aria-describedby="sort-help"
+            >
+              Last name Z-A
+            </button>
+            <div id="sort-help" class="visually-hidden">
+              Click to sort students by name
+            </div>
+          </div>
+        </div>
+      </header>
+      <section
+        id="list_of_students"
+        aria-live="polite"
+        aria-label="Student list"
+      >
+        <table id="list" role="grid" aria-label="Hogwarts students">
+          <thead class="visually-hidden">
+            <tr>
+              <th scope="col">Student Photo</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- student's template will be copied and inserted here -->
+          </tbody>
+        </table>
+
+        <template id="student">
+          <!-- the tr element defines a row in a table -->
+          <tr role="gridcell" tabindex="0">
+            <td>
+              <img
+                id="image"
+                src="images/bones_s.png"
+                alt="Student portrait"
+                loading="lazy"
+              />
+            </td>
+            <td data-field="firstName">First Name</td>
+            <td data-field="lastName">Last Name</td>
+          </tr>
+        </template>
+      </section>
+      <div
+        class="modal hidden"
+        role="dialog"
+        aria-labelledby="student-modal-title"
+        aria-hidden="true"
+      >
+        <div id="popupBox">
+          <button class="closebutton" aria-label="Close student details">
+            ✕
+          </button>
+          <div class="images">
+            <img id="picture" src="images/boot_t.png" alt="Student portrait" />
+            <img id="houseCrest" src="" alt="House crest" />
+          </div>
+          <div id="popup_details">
+            <h2 id="student-modal-title" class="visually-hidden">
+              Student Details
+            </h2>
+            <div class="info">
+              <span>First name:</span>
+              <span data-field="firstName">Hannah</span>
+            </div>
+            <div class="info">
+              <span>Middle name:</span>
+              <span data-field="middleName">None</span>
+            </div>
+            <div class="info">
+              <span>Nickname:</span>
+              <span data-field="nickName">None</span>
+            </div>
+            <div class="info">
+              <span>Last name:</span>
+              <span data-field="lastName">Abbott</span>
+            </div>
+            <div class="info">
+              <span>Blood status:</span>
+              <span data-field="bloodStatus">Pure</span>
+            </div>
+            <div class="info">
+              <span>Gender:</span>
+              <span data-field="gender">Girl</span>
+            </div>
+            <div class="info">
+              <span>House:</span>
+              <span data-field="house">Hufflepuff</span>
+            </div>
+            <div class="info">
+              <span>Prefect:</span>
+              <span data-field="isprefect">No</span>
+            </div>
+            <div class="info inq">
+              <span>Inquisitorial Squad Member:</span>
+              <span data-field="issquad">No</span>
+            </div>
+          </div>
+          <div id="popupButtons" role="group" aria-label="Student actions">
+            <button type="button" id="prefect" data-field="prefect">
+              Assign Prefect
+            </button>
+            <button type="button" id="squad" data-field="squad">
+              Assign to Inquisitorial Squad
+            </button>
+            <button type="button" id="expell" data-field="expell">
+              Expel Student
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="alertModal"
+        role="dialog"
+        aria-labelledby="alert-title"
+        aria-hidden="true"
+      >
+        <div class="modal-content">
+          <button class="close-button" aria-label="Close alert">✕</button>
+          <h2 id="alert-title" class="visually-hidden">Alert</h2>
+          <p id="alertMessage" role="alert"></p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Visually hidden styles for screen readers -->
+    <style>
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .search-section {
+        padding: 1rem;
+      }
+
+      .filtering button {
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        text-align: left;
+        width: 100%;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+      }
+
+      .filtering button:hover,
+      .filtering button:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        outline: 2px solid #0066cc;
+        outline-offset: 2px;
+      }
+
+      .filtering button[aria-pressed="true"] {
+        background-color: rgba(255, 255, 255, 0.2);
+        font-weight: bold;
+      }
+
+      .filtering h4 {
+        margin: 1rem 0 0.5rem 1rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: #666;
+        text-transform: uppercase;
+      }
+    </style>
+  </body>
 </html>
